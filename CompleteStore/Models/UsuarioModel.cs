@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace CompleteStore.Models
+{
+    public class UsuarioModel
+    {
+        public static bool ValidarUsuario(string login, string senha)
+        {
+            var ret = false;
+
+            using (var conexao = new SqlConnection())
+            {
+                conexao.ConnectionString = @"Data Source=cpro43847.publiccloud.com.br;Initial Catalog=DT02_STOCKDB;User ID=desenv2;Password=sat_Cosmix#@74367908";
+                conexao.Open();
+                using (var comando = new SqlCommand())
+                {
+                    comando.Connection = conexao;
+                    comando.CommandText = string.Format(
+                        "select count(*) from usuario where login='{0}' and senha='{1}'", login, senha);
+                    ret = ((int)comando.ExecuteScalar() > 0);
+                }
+            }
+
+            return ret;
+        }
+    }
+}
