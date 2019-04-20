@@ -1,6 +1,6 @@
 ﻿@model List<CompleteStore.Models.GrupoProduto>
 @{
-    ViewBag.Title = "Controle de Grupo de Produtos";
+    ViewBag.Title = "Cadastro de Grupo de Produtos";
 }
 <style>
     #grid_cadastro > thead > tr th:nth-child(2) {
@@ -96,7 +96,7 @@
 </div>
 @section Scripts{
     <script>
-        function abrir_form(dados) {
+       function abrir_form(dados) {
             $('#txt_nome').val(dados.Nome);
             $('#cbx_ativo').prop('checked', dados.Ativo);
             var modal_cadastro = $('#modal_cadastro');
@@ -105,20 +105,63 @@
                 message: modal_cadastro
             })
             .on('shown.bs.modal', function () {
-                modal_cadastro.show();
-                    
+                modal_cadastro.show(0, function () {
+                    $('#txt_nome').focus();
                 });
             })
             .on('hidden.bs.modal', function () {
                 modal_cadastro.hide().appendTo('body');
             });
+        }
+        $(document).on('click', '#btn_incluir', function () {
+            abrir_form({ Id: 0, Nome: '', Ativo: true });
         })
         .on('click', '.btn-alterar', function () {
-
+            var btn = $(this),
+                id = btn.closest('tr').attr('data-id'),
+                url = '@Url.Action("RecuperarGrupoProduto", "Cadastro")',
+                param = { 'id': id };
+            $.post(url, param, function (response) {
+                if (response) {
+                    abrir_form(response);
+                }
+            });
         })
-       
+        .on('click', '.btn-excluir', function () {
+            alert('3');
+        })
+
+
     </script>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
